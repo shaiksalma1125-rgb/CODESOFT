@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hangman Game</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+}
+
+h1 {
+  text-align:center;
+  color:#6a0dad;
+  text-shadow:2px 2px 5px white;
+}
+
+.top-bar {
+  display:flex;
+  justify-content:space-between;
+  padding:10px 20px;
+}
+
+#pauseBtn {
+  font-size:20px;
+  padding:8px 12px;
+  background:#6a0dad;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+#score { 
+  font-size:30px;
+  font-weight:bold;
+  color:#6a0dad;
+}
+
+#highScore {
+  font-size:20px;
+  font-weight:bold;
+  color:#ff1493;
+}
+
+#chances {
+  font-size:20px;
+  font-weight:bold;
+  color:#ff4500;
+}
+
+#letters {
+  width:360px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.row { display:flex; }
+
+#letters button {
+  width:35px;
+  height:35px;
+  margin:4px;
+  background:#ffffff;
+  border:2px solid #6a0dad;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#letters button:hover {
+  background:#d8b4f8;
+}
+
+#letters button:disabled {
+  background:#ccc;
+}
+
+canvas {
+  display:block;
+  margin:20px auto;
+  border:3px solid #6a0dad;
+  border-radius:10px;
+  background:white;
+}
+
+#word {
+  text-align:center;
+  font-size:2rem;
+  letter-spacing:10px;
+  color:#4b0082;
+}
+
+#overlay {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:50px;
+  font-weight:bold;
+  background:rgba(0,0,0,0.7);
+  color:white;
+  visibility:hidden;
+  transform:scale(0);
+  transition:transform 0.4s ease;
+}
+
+#overlay button {
+  margin-top:20px;
+  font-size:20px;
+  padding:10px 20px;
+  background:#ff69b4;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Hangman Game</h1>
+
+<div class="top-bar">
+  <div>
+    <div id="score">🏆 Score: 0</div>
+    <div id="highScore">🔥 High Score: 0</div>
+    <div id="chances">❤️ Chances: 6/6</div>
+  </div>
+  <button id="pauseBtn" onclick="togglePause()">⏸</button>
+</div>
+
+<div id="overlay">
+  <div id="overlayText"></div>
+  <button id="overlayBtn"></button>
+</div>
+
+<canvas id="canvas" width="220" height="220"></canvas>
+<div id="category" style="text-align:center;"></div>
+<div id="word"></div>
+<div id="letters"></div>
+
+<script>
+
+const words = [
+  {word:"APPLE", category:"Fruit"},
+  {word:"LION", category:"Animal"},
+  {word:"SHIRT", category:"Clothes"},
+  {word:"MANGO", category:"Fruit"},
+  {word:"TIGER", category:"Animal"}
+];
+
+let remainingWords = [...words];
+
+let selectedWord="", guessed=[], wrong=0;
+let score=0, paused=false;
+
+let highScore = localStorage.getItem("highScore") || 0;
+const maxWrong=6;
+let winState=false;
+
+document.getElementById("highScore").innerText = "🔥 High Score: " + highScore;
+document.getElementById("chances").innerText = "❤️ Chances: 6/6";
+
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+function init(){
+  ctx.clearRect(0,0,220,220);
+  winState=false;
+
+  document.getElementById("overlay").style.visibility="hidden";
+  document.getElementById("overlay").style.transform="scale(0)";
+
+  if(remainingWords.length === 0){
+    remainingWords = [...words];
+  }
+
+  let index = Math.floor(Math.random() * remainingWords.length);
+  let obj = remainingWords.splice(index, 1)[0];
+
+  selectedWord = obj.word;
+
+  guessed=[];
+  wrong=0;
+
+  document.getElementById("letters").innerHTML="";
+  document.getElementById("category").innerText="Category: "+obj.category;
+
+  // Reset chances
+  document.getElementById("chances").innerText = "❤️ Chances: " + (maxWrong - wrong) + "/" + maxWrong;
+
+  drawStand();
+  createButtons();
+  displayWord();
+}
+
+function drawStand(){
+  ctx.beginPath();
+  ctx.moveTo(10,200); ctx.lineTo(180,200);
+  ctx.moveTo(40,200); ctx.lineTo(40,20);
+  ctx.lineTo(120,20);
+  if(!winState) ctx.lineTo(120,40);
+  ctx.stroke();
+}
+
+function drawMan(stage){
+  if(stage>=1){ ctx.beginPath(); ctx.arc(120,60,15,0,Math.PI*2); ctx.stroke(); }
+  if(stage>=2){ ctx.beginPath(); ctx.moveTo(120,75); ctx.lineTo(120,130); ctx.stroke(); }
+  if(stage>=3){ ctx.beginPath(); ctx.moveTo(120,90); ctx.lineTo(90,110); ctx.stroke(); }
+  if(stage>=4){ ctx.beginPath(); ctx.moveTo(120,90); ctx.lineTo(150,110); ctx.stroke(); }
+  if(stage>=5){ ctx.beginPath(); ctx.moveTo(120,130); ctx.lineTo(95,170); ctx.stroke(); }
+  if(stage>=6){ ctx.beginPath(); ctx.moveTo(120,130); ctx.lineTo(145,170); ctx.stroke(); }
+}
+
+function drawDance(frame){
+  ctx.clearRect(0,0,220,220);
+
+  ctx.beginPath();
+  ctx.moveTo(10,200); ctx.lineTo(180,200);
+  ctx.moveTo(40,200); ctx.lineTo(40,20);
+  ctx.lineTo(120,20);
+  ctx.stroke();
+
+  ctx.beginPath(); ctx.arc(120,60,15,0,Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(120,75); ctx.lineTo(120,170); ctx.stroke();
+
+  if(frame%2===0){
+    ctx.moveTo(120,95); ctx.lineTo(80,80);
+    ctx.moveTo(120,95); ctx.lineTo(160,80);
+  } else {
+    ctx.moveTo(120,95); ctx.lineTo(90,120);
+    ctx.moveTo(120,95); ctx.lineTo(150,120);
+  }
+  ctx.stroke();
+}
+
+function displayWord(){
+  let display="";
+  for(let l of selectedWord){
+    display += guessed.includes(l)? l+" " : "_ ";
+  }
+  document.getElementById("word").innerText=display;
+
+  if(!display.includes("_")){
+    winState=true;
+
+    let frame=0;
+    let interval=setInterval(()=>drawDance(frame++),300);
+
+    setTimeout(()=>{
+      clearInterval(interval);
+      showWin();
+    },2000);
+
+    disableAll();
+  }
+}
+
+function createButtons(){
+  const rows=[10,9,7];
+  let start=65;
+
+  for(let r of rows){
+    let rowDiv=document.createElement("div");
+    rowDiv.className="row";
+
+    for(let i=0;i<r;i++){
+      let btn=document.createElement("button");
+      let letter=String.fromCharCode(start++);
+      btn.innerText=letter;
+
+      btn.onclick=function(){
+        if(!paused){
+          guess(letter);
+          btn.disabled=true;
+        }
+      };
+
+      rowDiv.appendChild(btn);
+    }
+    document.getElementById("letters").appendChild(rowDiv);
+  }
+}
+
+function guess(letter){
+  if(selectedWord.includes(letter)){
+    if(!guessed.includes(letter)){
+      guessed.push(letter);
+      score+=2;
+      document.getElementById("score").innerText="🏆 Score: "+score;
+
+      if(score > highScore){
+        highScore = score;
+        localStorage.setItem("highScore", highScore);
+        document.getElementById("highScore").innerText="🔥 High Score: "+highScore;
+      }
+    }
+  } else {
+    wrong++;
+    drawMan(wrong);
+
+    // Update chances
+    document.getElementById("chances").innerText = "❤️ Chances: " + (maxWrong - wrong) + "/" + maxWrong;
+
+    if(wrong===maxWrong){
+      showGameOver();
+      disableAll();
+    }
+  }
+  displayWord();
+}
+
+function showGameOver(){
+  let overlay=document.getElementById("overlay");
+  document.getElementById("overlayText").innerText="GAME OVER 😢";
+  document.getElementById("overlayBtn").innerText="🔄 Start Again";
+  document.getElementById("overlayBtn").onclick=restartGame;
+
+  overlay.style.visibility="visible";
+  setTimeout(()=>overlay.style.transform="scale(1)",50);
+}
+
+function showWin(){
+  let overlay=document.getElementById("overlay");
+  document.getElementById("overlayText").innerText="YOU WON 🎉";
+  document.getElementById("overlayBtn").innerText="➡ Next Level";
+  document.getElementById("overlayBtn").onclick=restartGame;
+
+  overlay.style.visibility="visible";
+  setTimeout(()=>overlay.style.transform="scale(1)",50);
+}
+
+function disableAll(){
+  document.querySelectorAll("#letters button").forEach(b=>b.disabled=true);
+}
+
+function restartGame(){ init(); }
+
+function togglePause(){
+  paused=!paused;
+}
+
+init();
+
+</script>
+
+</body>
+</html>

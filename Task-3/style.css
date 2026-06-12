@@ -1,0 +1,130 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+
+    background:linear-gradient(
+        135deg,
+        #fff5f9 0%,
+        #ffeef7 35%,
+        #f4f8ff 70%,
+        #ffffff 100%
+    );
+}
+.calculator{
+    background:rgba(255,255,255,0.85);
+
+    backdrop-filter:blur(10px);
+
+    padding:20px;
+
+    border-radius:25px;
+
+    border:2px solid #ffd0e8;
+
+    box-shadow:
+        0 0 5px #ffffff,
+        0 0 12px #ffd0e8,
+        0 0 15px rgba(255,208,232,0.5);
+
+    width:360px;
+}
+
+#display{
+    width:100%;
+    height:75px;
+
+    border:2px solid #ffd0e8;
+
+    outline:none;
+
+    border-radius:16px;
+
+    background:white;
+
+    color:#1f2937;
+
+    font-size:30px;
+    font-weight:600;
+
+    text-align:right;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    box-shadow:
+        inset 0 2px 5px rgba(0,0,0,.08);
+}
+
+
+.buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.buttons button{
+    height:65px;
+
+    border:none;
+
+    border-radius:16px;
+
+    font-size:22px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all 0.15s ease;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.08);
+}
+
+.buttons button:hover{
+    transform:translateY(-2px);
+}
+
+.buttons button:active{
+    transform:translateY(3px);
+    box-shadow:
+        0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* Number Buttons */
+.buttons button{
+    color:#374151;
+}
+
+/* AC Button */
+.ac{
+    background:#ff7aa8 !important;
+    color:white !important;
+}
+
+/* Operators */
+.operator{
+    background:#ffd6ea !important;
+    color:#d63384 !important;
+}
+
+/* Backspace */
+.back{
+    background:#eef2ff !important;
+    color:#4f46e5 !important;
+}
+
+/* Equal Button */
+.equal{
+    background:#22c55e !important;
+    color:white !important;
+}

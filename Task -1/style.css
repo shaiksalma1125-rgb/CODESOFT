@@ -1,0 +1,595 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    line-height:1.6;
+}
+
+/* NAVBAR */
+
+nav{
+    width:100%;
+    padding:25px 8%;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#111827;
+
+    position:fixed;
+    top:0;
+    left:0;
+
+    z-index:1000;
+}
+
+.logo{
+    font-size:32px;
+    font-family:'Pacifico',cursive;
+    color:#38bdf8;
+    letter-spacing:2px;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:35px;
+}
+
+nav ul li a{
+    color:white;
+    text-decoration:none;
+    font-size:18px;
+    transition:.3s;
+}
+
+nav ul li a:hover{
+    color:#38bdf8;
+}
+
+/* ALL SECTIONS */
+
+section{
+    min-height:100vh;
+    padding:120px 8%;
+}
+
+/* HOME SECTION */
+
+.home{
+    min-height:100vh;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:80px;
+
+    padding:120px 8%;
+    overflow:hidden;
+}
+.home-image{
+    flex-shrink:0;
+}
+
+/* LEFT SIDE */
+
+.home-text{
+    flex:1;
+    max-width:700px;
+}
+
+.home-text h3{
+    font-size:32px;
+    color:#cbd5e1;
+    margin-bottom:10px;
+}
+
+.home-text h1{
+    font-size:85px;
+    line-height:1.1;
+    margin-bottom:20px;
+}
+
+.home-text span{
+    color:#38bdf8;
+}
+
+.home-text p{
+    width:100%;
+    font-size:19px;
+    line-height:1.9;
+    color:#dbeafe;
+    margin-top:18px;
+}
+
+/* TYPING TEXT */
+
+.typing-text{
+    display:flex;
+    align-items:center;
+    flex-wrap:nowrap;
+
+    gap:10px;
+
+    font-size:30px;
+    font-weight:600;
+
+    margin-bottom:20px;
+
+    white-space:nowrap;
+}
+
+
+/* STATIC TEXT */
+
+.typing-text .static-text{
+    color:white;
+}
+
+/* TYPING AREA */
+/* TYPING AREA */
+
+.typing{
+    position:relative;
+
+    width:430px;
+    height:40px;
+
+    overflow:hidden;
+
+    flex-shrink:0;
+}
+
+
+/* TEXT */
+
+.typing::before{
+    content:"Computer Science Student";
+
+    color:#38bdf8;
+
+    position:absolute;
+    left:0;
+    top:0;
+
+    white-space:nowrap;
+    overflow:hidden;
+
+    border-right:3px solid #38bdf8;
+
+    width:0;
+
+    animation:
+    typing 5s steps(24) infinite,
+    blink .8s infinite;
+}
+
+/* LETTER BY LETTER */
+
+@keyframes typing{
+
+    0%{
+        width:0;
+    }
+
+    50%{
+        width:24ch;
+    }
+
+    100%{
+        width:24ch;
+    }
+}
+
+/* CURSOR */
+
+@keyframes blink{
+
+    50%{
+        border-color:transparent;
+    }
+}
+
+/* RIGHT IMAGE */
+
+.home-image{
+    flex:1;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    position:relative;
+}
+
+/* BLUE GLOW CIRCLE */
+
+.circle{
+    position:absolute;
+
+    width:430px;
+    height:430px;
+
+    border-radius:50%;
+
+    border:4px solid #38bdf8;
+
+    box-shadow:
+    0 0 25px #38bdf8,
+    0 0 60px rgba(56,189,248,.6);
+
+    z-index:0;
+}
+
+/* PROFILE IMAGE */
+
+.home-image img{
+    width:370px;
+    height:370px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    position:relative;
+    z-index:1;
+
+    transition:.4s;
+}
+
+/* IMAGE HOVER */
+
+.home-image img:hover{
+    transform:scale(1.03);
+}
+
+/* SOCIAL ICONS */
+
+.social-icons{
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    margin-top:30px;
+}
+
+.social-icons a{
+    width:50px;
+    height:50px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:50%;
+
+    font-size:22px;
+
+    text-decoration:none;
+
+    transition:.3s;
+}
+
+/* LINKEDIN */
+
+.social-icons a:nth-child(1){
+    color:#0A66C2;
+    border:2px solid #0A66C2;
+}
+
+/* INSTAGRAM */
+
+.social-icons a:nth-child(2){
+    color:#E1306C;
+    border:2px solid #E1306C;
+}
+
+/* TELEGRAM */
+
+.social-icons a:nth-child(3){
+    color:#229ED9;
+    border:2px solid #229ED9;
+}
+
+/* GMAIL */
+
+.social-icons a:nth-child(4){
+    color:#EA4335;
+    border:2px solid #EA4335;
+}
+
+/* ICON HOVER */
+
+.social-icons a:hover{
+    transform:translateY(-5px) scale(1.1);
+
+    box-shadow:0 0 20px rgba(255,255,255,0.2);
+}
+/* CV BUTTON */
+
+.cv-btn{
+    margin-top:30px;
+}
+
+.cv-btn a{
+
+    display:inline-block;
+
+    padding:14px 32px;
+
+    background:#38bdf8;
+
+    color:#0f172a;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    border-radius:30px;
+
+    transition:.3s;
+}
+
+.cv-btn a:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 0 20px #38bdf8;
+}
+
+/* TITLES */
+
+.title{
+    text-align:center;
+    font-size:45px;
+    margin-bottom:50px;
+    color:#38bdf8;
+}
+
+/* ABOUT */
+
+#about{
+    background:#111827;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.about-content{
+    max-width:900px;
+    margin:auto;
+
+    font-size:20px;
+    color:#e2e8f0;
+
+    line-height:2;
+    text-align:center;
+}
+
+.about-name{
+    color:#38bdf8;
+    font-weight:600;
+}
+
+/* SKILLS */
+
+#skills{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.skills-container{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+
+    gap:25px;
+    margin-top:30px;
+}
+
+.skill{
+    background:#1e293b;
+
+    padding:18px 35px;
+
+    border-radius:35px;
+    border:2px solid #38bdf8;
+
+    font-size:20px;
+
+    transition:.3s;
+}
+
+.skill:hover{
+    background:#38bdf8;
+    color:#0f172a;
+
+    transform:translateY(-5px);
+}
+
+/* PROJECTS */
+
+.projects{
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+}
+
+/* PROJECT CARD */
+
+.project-card{
+    text-decoration:none;
+
+    color:white;
+
+    background:#1e293b;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    transition:.3s;
+
+    overflow:hidden;
+}
+
+/* HOVER */
+
+.project-card:hover{
+    transform:translateY(-10px);
+}
+
+/* NORMAL PROJECT IMAGES */
+
+.project-card img{
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
+    border-radius:15px;
+
+    display:block;
+}
+
+/* STUDENT MANAGEMENT IMAGE */
+
+.student-img{
+    object-fit:contain !important;
+
+    background:#111827;
+
+    padding:10px;
+}
+
+/* PROJECT TITLE */
+
+.project-card h3{
+    margin:15px 0;
+
+    color:#38bdf8;
+
+    font-size:26px;
+}
+
+/* PROJECT DESCRIPTION */
+
+.project-card p{
+    line-height:1.8;
+
+    color:#e2e8f0;
+}
+
+/* CONTACT */
+
+.contact{
+    text-align:center;
+}
+
+.contact-icons{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+
+    margin-top:25px;
+}
+
+.contact-icons img{
+    width:50px;
+    transition:.3s;
+}
+
+.contact-icons img:hover{
+    transform:scale(1.1);
+}
+
+/* FOOTER */
+
+footer{
+    background:#111827;
+
+    text-align:center;
+
+    padding:20px;
+    color:#cbd5e1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+    nav{
+        flex-direction:column;
+        gap:15px;
+        padding:20px 5%;
+    }
+
+    nav ul{
+        gap:20px;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .home{
+        flex-direction:column-reverse;
+        text-align:center;
+
+        justify-content:center;
+    }
+
+    .home-text h1{
+        font-size:60px;
+    }
+
+    .typing-text{
+        justify-content:center;
+        font-size:22px;
+    }
+
+    .home-text p{
+        font-size:17px;
+    }
+
+    .social-icons{
+        justify-content:center;
+    }
+
+    .title{
+        font-size:38px;
+    }
+
+    .about-content{
+        font-size:18px;
+    }
+
+    .home-image{
+        margin-top:30px;
+    }
+
+    .circle{
+        width:300px;
+        height:300px;
+    }
+
+    .home-image img{
+        width:250px;
+        height:250px;
+    }
+}
